@@ -6,6 +6,7 @@ import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.sql;
 import de.turing85.quarkus.camel.startup.config.DatasourceRegisterer;
 import io.vertx.core.http.HttpMethod;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.JsonLibrary;
 
 @SuppressWarnings("unused")
 public class MyRouteBuilder extends RouteBuilder {
@@ -13,8 +14,8 @@ public class MyRouteBuilder extends RouteBuilder {
   public void configure() {
     from(platformHttp("/animals")
         .httpMethodRestrict(HttpMethod.GET.name()))
-        .to(sql("SELECT id FROM animal")
+        .to(sql("SELECT * FROM animal")
             .dataSource("#" + DatasourceRegisterer.DATASOURCE_ID))
-        .process(exchange -> System.out.println(exchange.getIn().getBody()));
+        .marshal().json(JsonLibrary.Jackson);
   }
 }

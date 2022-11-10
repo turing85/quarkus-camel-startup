@@ -3,7 +3,7 @@ package de.turing85.quarkus.camel.startup.config;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.sql.DataSource;
-import org.apache.camel.impl.event.CamelContextStartingEvent;
+import org.apache.camel.impl.event.CamelContextInitializingEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class DatasourceRegisterer {
     this.dataSource = dataSource;
   }
 
-  void startUp(@Observes CamelContextStartingEvent event) {
+  void startUp(@Observes CamelContextInitializingEvent event) {
     LOGGER.info("Registering datasource");
     event.getContext().getRegistry().bind(DATASOURCE_ID, dataSource);
   }
